@@ -1,0 +1,162 @@
+show databases;
+create database bank_1bm23cs145;
+use bank_1bm23cs145;
+
+create table Branch_1bm23cs145(
+Branchname varchar(20),
+Branchcity varchar(20),
+Assets int,
+PRIMARY KEY(Branchname)
+);
+
+create table BankAccount_1bm23cs145(
+Accno int,
+Branchname varchar(20),
+Balance int,
+PRIMARY KEY(Accno),
+foreign key(Branchname) references Branch_1bm23cs145(Branchname)
+);
+
+create table BankCustomer_1bm23cs145(
+Customername varchar(20),
+Customerstreet varchar(20),
+City varchar(20),
+PRIMARY KEY(Customername)
+);
+
+create table Depositer_1bm23cs145(
+Customername varchar(20),
+Accno int,
+PRIMARY KEY(Customername,Accno),
+foreign key(Customername) references BankCustomer_1bm23cs145(Customername),
+foreign key(Accno) references BankAccount_1bm23cs145(Accno)
+);
+
+create table Loan_1bm23cs145(
+Loannumber int,
+Branchname varchar(20),
+Amount int, 
+PRIMARY KEY(Loannumber),
+foreign key(Branchname) references Branch_1bm23cs145(Branchname)
+);
+
+insert into Branch_1bm23cs145 values("SBI_Chamrajpet", "Bangalore", 50000);
+insert into Branch_1bm23cs145 values("SBI_ResidencyRoad", "Bangalore", 10000);
+insert into Branch_1bm23cs145 values("SBI_ShivajiRoad", "Bombay", 20000);
+insert into Branch_1bm23cs145 values("SBI_ParlimentRoad", "Delhi", 10000);
+insert into Branch_1bm23cs145 values("SBI_Jantarmantar", "Delhi", 20000);
+
+insert into BankAccount_1bm23cs145 values(1, "SBI_Chamrajpet",2000 );
+insert into BankAccount_1bm23cs145 values(2, "SBI_ResidencyRoad", 5000);
+insert into BankAccount_1bm23cs145 values(3, "SBI_ShivajiRoad", 6000);
+insert into BankAccount_1bm23cs145 values(4, "SBI_ParlimentRoad", 9000);
+insert into BankAccount_1bm23cs145 values(5, "SBI_Jantarmantar", 8000);
+insert into BankAccount_1bm23cs145 values(6, "SBI_ShivajiRoad", 4000);
+insert into BankAccount_1bm23cs145 values(8, "SBI_ResidencyRoad", 4000);
+insert into BankAccount_1bm23cs145 values(9, "SBI_ParlimentRoad", 3000);
+insert into BankAccount_1bm23cs145 values(10, "SBI_ResidencyRoad", 5000);
+insert into BankAccount_1bm23cs145 values(11, "SBI_Jantarmantar", 2000);
+
+insert into BankCustomer_1bm23cs145 values("Avinash", "Bull temple road","Bangalore" );
+insert into BankCustomer_1bm23cs145 values("Avinash", "Bannerghatta Road","Bangalore" );
+insert into BankCustomer_1bm23cs145 values("Mohan", "NationalCollegeRoad","Bangalore" );
+insert into BankCustomer_1bm23cs145 values("Nikhil", "Akbar Road","Delhi" );
+insert into BankCustomer_1bm23cs145 values("Ravi", "Prithviraj Road","Delhi" );
+
+insert into Depositer_1bm23cs145 values("Avinash", 1);
+insert into Depositer_1bm23cs145 values("Dinesh", 2);
+insert into Depositer_1bm23cs145 values("Nikhil", 4);
+insert into Depositer_1bm23cs145 values("Ravi", 5);
+insert into Depositer_1bm23cs145 values("Avinash", 8);
+insert into Depositer_1bm23cs145 values("Nikhil", 9);
+insert into Depositer_1bm23cs145 values("Dinesh", 10);
+insert into Depositer_1bm23cs145 values("Nikhil", 11);
+
+insert into Loan_1bm23cs145 values(1, "SBI_Chamrajpet", 1000);
+insert into Loan_1bm23cs145 values(2, "SBI_ResidencyRoad", 2000);
+insert into Loan_1bm23cs145 values(3, "SBI_ShivajiRoad", 3000);
+insert into Loan_1bm23cs145 values(4, "SBI_ParlimentRoad", 4000);
+insert into Loan_1bm23cs145 values(5, "SBI_Jantarmantar", 5000);
+
+select * from Branch_1bm23cs145 ;
+select * from BankAccount_1bm23cs145 ;
+select * from BankCustomer_1bm23cs145 ;
+select * from Depositer_1bm23cs145 ;
+select * from Loan_1bm23cs145 ;
+
+desc Branch_1bm23cs145 ;
+desc BankAccount_1bm23cs145 ;
+desc BankCustomer_1bm23cs145 ;
+desc Depositer_1bm23cs145 ;
+desc Loan_1bm23cs145 ;
+
+select d.Customername 
+from Depositer_1bm23cs145 d,BankAccount_1bm23cs145 b
+where b.Branchname="SBI_ResidencyRoad"
+AND d.accno=b.accno GROUP BY d.Customername
+having count(d.accno) >=2;
+
+create view br
+as select Branchname , sum(amount)
+   from loan_1bm23cs145
+   group by Branchname;
+select * from br;
+
+alter table Branch_1bm23cs145
+change column assets assests_in_lakhs real;
+
+
+insert into Branch_1bm23cs145 values("SBI_MantriMarg", "Delhi", 200000);
+insert into BankAccount_1bm23cs145 values(12, "SBI_MantriMarg", 2000);
+insert into Depositer_1bm23cs145 values("Nikhil", 12);
+
+create table Borrower_1bm23cs145(
+Customername varchar(20),
+LoanNumber int,
+PRIMARY KEY(Customername,LoanNumber),
+foreign key(Customername) references BankCustomer_1bm23cs145(Customername),
+foreign key(LoanNumber) references Loan_1bm23cs145(LoanNumber)
+);
+
+insert into Borrower_1bm23cs145 values("Avinash",1);
+insert into Borrower_1bm23cs145 values("Dinesh",2);
+insert into Borrower_1bm23cs145 values("Mohan",3);
+insert into Borrower_1bm23cs145 values("Nikhil", 4);
+insert into Borrower_1bm23cs145 values("Ravi",5);
+
+select * from Borrower_1bm23cs145;
+
+select distinct d.customername
+from Depositer_1bm23cs145 d,BankAccount_1bm23cs145 ba,Branch_1bm23cs145 b
+where d.accno=ba.accno and ba.branchname=b.branchname and b.branchcity="Delhi"
+group by d.customername having count(b.branchname)>1;
+
+select b.customername
+from borrower_1bm23cs145 b
+where b.loannumber not in (select d.accno
+						   from depositer_1bm23cs145 d
+                           where b.loannumber=d.accno);
+
+select b.customername
+from Borrower_1bm23cs145 b
+where b.loannumber in ( select d.accno
+                        from depositer_1bm23cs145 d,BankAccount_1bm23cs145 ba, Branch_1bm23cs145 b
+                        where b.loannumber=d.accno and d.accno=ba.accno and ba.branchname=b.branchname
+                              and b.branchcity="Bangalore");
+
+select branchname
+from Branch_1bm23cs145
+where assests_in_lakhs > all (select assests_in_lakhs
+                              from Branch_1bm23cs145 
+                              where branchcity="Bangalore" );
+
+delete from BankAccount_1bm23cs145 ba
+where ba.branchname=( select b.branchname
+                      from branch_1bm23cs145 b
+                      where b.branchcity="Bombay");
+select * from BankAccount_1bm23cs145;
+
+update BankAccount_1bm23cs145
+set balance=balance+((5*balance)/100)
+where accno in (1,2,4,5,8,9,10,11,12);
+select * from BankAccount_1bm23cs145;
